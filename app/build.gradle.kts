@@ -56,6 +56,14 @@ dependencies {
     kapt(Dependencies.DI.toothpickCompiler)
     implementation(Dependencies.DI.toothpickRuntime)
 
+    implementation(Dependencies.Network.okHttp)
+    implementation(Dependencies.Network.retrofit)
+    implementation(Dependencies.Network.retrofitConverterMoshi)
+    implementation(Dependencies.Network.retrofitCoroutinesAdapter)
+
+    kapt(Dependencies.Serialization.moshiCodegen)
+    implementation(Dependencies.Serialization.moshi)
+
     implementation(Dependencies.viewBindingPropertyDelegate)
 
     coreLibraryDesugaring(Dependencies.desugarJdkLibs)
