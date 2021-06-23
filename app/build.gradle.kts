@@ -1,10 +1,13 @@
+import com.vender98.aviasearch.dependencies.Versions
+import com.vender98.aviasearch.dependencies.Dependencies
+
 plugins {
     id("com.android.application")
     id("kotlin-android")
 }
 
 android {
-    compileSdkVersion(30)
+    compileSdkVersion(Versions.compileSdk)
 
     compileOptions {
         isCoreLibraryDesugaringEnabled = true
@@ -18,8 +21,8 @@ android {
 
     defaultConfig {
         applicationId = "com.vender98.aviasearch"
-        minSdkVersion(23)
-        targetSdkVersion(30)
+        minSdkVersion(Versions.minSdk)
+        targetSdkVersion(Versions.targetSdk)
 
         versionName = "1.0"
         versionCode = 1
@@ -38,11 +41,13 @@ android {
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.5.10")
-    implementation("androidx.core:core-ktx:1.5.0")
-    implementation("androidx.appcompat:appcompat:1.3.0")
-    implementation("com.google.android.material:material:1.3.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.0.4")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:${rootProject.extra["kotlin_version"]}")
 
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
+    implementation(Dependencies.AndroidX.ktxCore)
+    implementation(Dependencies.AndroidX.appcompat)
+    implementation(Dependencies.AndroidX.constraintLayout)
+
+    implementation(Dependencies.Google.material)
+
+    coreLibraryDesugaring(Dependencies.desugarJdkLibs)
 }
