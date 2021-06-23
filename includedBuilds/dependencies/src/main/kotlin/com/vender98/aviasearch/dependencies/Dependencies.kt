@@ -6,9 +6,17 @@ object Versions {
     const val targetSdk = 30
 
     const val toothpick = "3.1.0"
+    const val kotlinCoroutines = "1.5.0"
 }
 
 object Dependencies {
+
+    object Kotlin {
+        const val coroutines =
+            "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.kotlinCoroutines}"
+        const val coroutinesAndroid =
+            "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.kotlinCoroutines}"
+    }
 
     object AndroidX {
         const val coreKtx = "androidx.core:core-ktx:1.3.2"

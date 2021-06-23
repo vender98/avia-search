@@ -43,6 +43,8 @@ android {
 
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib:${rootProject.extra["kotlin_version"]}")
+    implementation(Dependencies.Kotlin.coroutines)
+    implementation(Dependencies.Kotlin.coroutinesAndroid)
 
     implementation(Dependencies.AndroidX.coreKtx)
     implementation(Dependencies.AndroidX.fragmentKtx)
