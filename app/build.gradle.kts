@@ -4,6 +4,7 @@ import com.vender98.aviasearch.dependencies.Dependencies
 plugins {
     id("com.android.application")
     id("kotlin-android")
+    id("kotlin-kapt")
 }
 
 android {
@@ -48,6 +49,9 @@ dependencies {
     implementation(Dependencies.AndroidX.constraintLayout)
 
     implementation(Dependencies.Google.material)
+
+    kapt(Dependencies.DI.toothpickCompiler)
+    implementation(Dependencies.DI.toothpickRuntime)
 
     coreLibraryDesugaring(Dependencies.desugarJdkLibs)
 }
