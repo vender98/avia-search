@@ -1,7 +1,8 @@
-package com.vender98.aviasearch
+package com.vender98.aviasearch.ui
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import com.vender98.aviasearch.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
