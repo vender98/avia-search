@@ -1,5 +1,5 @@
-import com.vender98.aviasearch.dependencies.Versions
 import com.vender98.aviasearch.dependencies.Dependencies
+import com.vender98.aviasearch.dependencies.Versions
 
 plugins {
     id("com.android.application")
@@ -44,7 +44,8 @@ android {
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib:${rootProject.extra["kotlin_version"]}")
 
-    implementation(Dependencies.AndroidX.ktxCore)
+    implementation(Dependencies.AndroidX.coreKtx)
+    implementation(Dependencies.AndroidX.fragmentKtx)
     implementation(Dependencies.AndroidX.appcompat)
     implementation(Dependencies.AndroidX.constraintLayout)
 

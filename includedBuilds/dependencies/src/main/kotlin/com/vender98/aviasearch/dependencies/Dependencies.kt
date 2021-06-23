@@ -11,7 +11,8 @@ object Versions {
 object Dependencies {
 
     object AndroidX {
-        const val ktxCore = "androidx.core:core-ktx:1.5.0"
+        const val coreKtx = "androidx.core:core-ktx:1.3.2"
+        const val fragmentKtx = "androidx.fragment:fragment-ktx:1.3.3"
         const val appcompat = "androidx.appcompat:appcompat:1.3.0"
         const val constraintLayout = "androidx.constraintlayout:constraintlayout:2.0.4"
     }
