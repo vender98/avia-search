@@ -29,4 +29,6 @@ object Dependencies {
     }
 
     const val desugarJdkLibs = "com.android.tools:desugar_jdk_libs:1.1.5"
+    const val viewBindingPropertyDelegate =
+        "com.kirich1409.viewbindingpropertydelegate:viewbindingpropertydelegate:1.3.1"
 }

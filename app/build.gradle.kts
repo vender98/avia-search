@@ -54,5 +54,7 @@ dependencies {
     kapt(Dependencies.DI.toothpickCompiler)
     implementation(Dependencies.DI.toothpickRuntime)
 
+    implementation(Dependencies.viewBindingPropertyDelegate)
+
     coreLibraryDesugaring(Dependencies.desugarJdkLibs)
 }
