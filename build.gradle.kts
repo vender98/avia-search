@@ -3,7 +3,7 @@ plugins {
 }
 
 buildscript {
-    extra["kotlin_version"] = "1.5.10"
+    extra["kotlin_version"] = "1.4.32"
 
     repositories {
         google()
