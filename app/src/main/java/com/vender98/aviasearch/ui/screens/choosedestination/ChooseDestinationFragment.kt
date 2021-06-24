@@ -33,7 +33,6 @@ class ChooseDestinationFragment : BaseFragment(R.layout.fragment_choose_destinat
             destinationAutoCompleteTextView.init(viewModel::onDestinationCityInputChanged)
             searchButton.setOnClickListener { viewModel.onSearchButtonClicked() }
         }
-        observeViewModel()
     }
 
     private fun AutoCompleteTextView.init(onInputChanged: (String) -> Unit) {
@@ -53,26 +52,28 @@ class ChooseDestinationFragment : BaseFragment(R.layout.fragment_choose_destinat
         items
     )
 
+    override fun onStart() {
+        super.onStart()
+        observeViewModel()
+    }
+
     private fun observeViewModel() {
         lifecycleScope
-            .launchWhenStarted {
+            .launchWhenStartedUntilStop {
                 viewModel.departureCitiesFlow.collect { cities ->
                     updateCities(binding.departureAutoCompleteTextView, cities)
                 }
             }
-            .untilStop()
         lifecycleScope
-            .launchWhenStarted {
+            .launchWhenStartedUntilStop {
                 viewModel.destinationCitiesFlow.collect { cities ->
                     updateCities(binding.destinationAutoCompleteTextView, cities)
                 }
             }
-            .untilStop()
         lifecycleScope
-            .launchWhenStarted {
+            .launchWhenStartedUntilStop {
                 viewModel.searchButtonStateFlow.collect { updateButton(it) }
             }
-            .untilStop()
     }
 
     private fun updateCities(autoCompleteTextView: AutoCompleteTextView, cities: List<City>) {
