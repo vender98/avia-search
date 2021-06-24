@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">AviaSearch</string>
+
+    <!--Choose destination-->
+    <string name="choose_destination_departure_label">Город отправления</string>
+    <string name="choose_destination_destination_label">Город назначения</string>
+    <string name="choose_destination_search_button">Поиск</string>
+
 </resources>
