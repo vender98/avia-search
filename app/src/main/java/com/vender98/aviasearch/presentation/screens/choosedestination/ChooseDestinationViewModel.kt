@@ -6,7 +6,11 @@ import com.vender98.aviasearch.domain.City
 import com.vender98.aviasearch.presentation.common.ErrorHandler
 import com.vender98.aviasearch.repository.CityRepository
 import com.vender98.aviasearch.ui.screens.choosedestination.SearchButtonState
+import com.vender98.aviasearch.ui.screens.searchtickets.Route
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -24,6 +28,12 @@ class ChooseDestinationViewModel @Inject constructor(
 
     private val _searchButtonStateFlow = MutableStateFlow(SearchButtonState.DISABLED)
     val searchButtonStateFlow = _searchButtonStateFlow.asStateFlow()
+
+    private val _navigateToSearchTicketsEventsFlow = MutableSharedFlow<Route>(
+        extraBufferCapacity = 1,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
+    val navigateToSearchTicketsEventsFlow = _navigateToSearchTicketsEventsFlow.asSharedFlow()
 
     private var departureCityInput: String = ""
     private var destinationCityInput: String = ""
@@ -65,6 +75,11 @@ class ChooseDestinationViewModel @Inject constructor(
     }
 
     fun onSearchButtonClicked() {
-        // TODO: navigate to the "Search tickets" screen
+        _navigateToSearchTicketsEventsFlow.tryEmit(
+            Route(
+                departureCity = departureCitiesFlow.value.first { it.name.equals(departureCityInput, ignoreCase = true) },
+                destinationCity = destinationCitiesFlow.value.first { it.name.equals(destinationCityInput, ignoreCase = true) }
+            )
+        )
     }
 }

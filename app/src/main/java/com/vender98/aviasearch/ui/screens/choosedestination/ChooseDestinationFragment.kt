@@ -14,6 +14,8 @@ import com.vender98.aviasearch.di.ToothpickViewModelFactory
 import com.vender98.aviasearch.domain.City
 import com.vender98.aviasearch.presentation.screens.choosedestination.ChooseDestinationViewModel
 import com.vender98.aviasearch.ui.base.BaseFragment
+import com.vender98.aviasearch.ui.screens.searchtickets.Route
+import com.vender98.aviasearch.ui.screens.searchtickets.SearchTicketsFragment
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
@@ -74,6 +76,10 @@ class ChooseDestinationFragment : BaseFragment(R.layout.fragment_choose_destinat
             .launchWhenStartedUntilStop {
                 viewModel.searchButtonStateFlow.collect { updateButton(it) }
             }
+        lifecycleScope
+            .launchWhenStartedUntilStop {
+                viewModel.navigateToSearchTicketsEventsFlow.collect { navigateToSearchTicketsScreen(it) }
+            }
     }
 
     private fun updateCities(autoCompleteTextView: AutoCompleteTextView, cities: List<City>) {
@@ -94,6 +100,14 @@ class ChooseDestinationFragment : BaseFragment(R.layout.fragment_choose_destinat
                 searchProgressBar.isVisible = false
             }
         }
+    }
+
+    private fun navigateToSearchTicketsScreen(route: Route) {
+        requireActivity().supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.fragment_container, SearchTicketsFragment.newInstance(route))
+            .addToBackStack(null)
+            .commit()
     }
 
     companion object {
