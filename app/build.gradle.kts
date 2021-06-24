@@ -65,6 +65,7 @@ dependencies {
     implementation(Dependencies.Serialization.moshi)
 
     implementation(Dependencies.viewBindingPropertyDelegate)
+    implementation(Dependencies.flowBinding)
 
     coreLibraryDesugaring(Dependencies.desugarJdkLibs)
 }
