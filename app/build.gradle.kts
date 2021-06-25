@@ -53,6 +53,7 @@ dependencies {
     implementation(Dependencies.AndroidX.constraintLayout)
 
     implementation(Dependencies.Google.material)
+    implementation(Dependencies.Google.maps)
 
     kapt(Dependencies.DI.toothpickCompiler)
     implementation(Dependencies.DI.toothpickRuntime)
