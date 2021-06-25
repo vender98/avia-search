@@ -6,12 +6,20 @@ import androidx.lifecycle.ViewModelProvider
 import toothpick.Toothpick
 import toothpick.config.Module
 
-class ToothpickViewModelFactory : ViewModelProvider.Factory {
+class ToothpickViewModelFactory(
+    private val bindDependencies: Module.() -> Unit = {}
+) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T =
         Toothpick
-            .openScope(ScopeNames.APP_SCOPE)
+            .openScopes(ScopeNames.APP_SCOPE, this.javaClass.simpleName)
+            .installModules(Module().apply {
+                bindDependencies()
+            })
             .getInstance(modelClass)
+            .also {
+                Toothpick.closeScope(this.javaClass.simpleName)
+            }
 }
 
 class ToothpickAndroidViewModelFactory(private val application: Application) : ViewModelProvider.Factory {
