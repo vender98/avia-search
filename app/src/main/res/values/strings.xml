@@ -4,6 +4,9 @@
     <!--Common-->
     <string name="common_ok">OK</string>
 
+    <!--Main-->
+    <string name="main_google_play_services_inaccessibility_message">Для работы приложения необходимы Google Play services</string>
+
     <!--Choose destination-->
     <string name="choose_destination_departure_label">Город отправления</string>
     <string name="choose_destination_destination_label">Город назначения</string>
