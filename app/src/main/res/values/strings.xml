@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">AviaSearch</string>
 
+    <!--Common-->
+    <string name="common_ok">OK</string>
+
     <!--Choose destination-->
     <string name="choose_destination_departure_label">Город отправления</string>
     <string name="choose_destination_destination_label">Город назначения</string>
