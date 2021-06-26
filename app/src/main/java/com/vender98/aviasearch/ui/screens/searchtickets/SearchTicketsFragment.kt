@@ -10,6 +10,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.maps.android.ktx.awaitMap
@@ -66,6 +67,9 @@ class SearchTicketsFragment : BaseFragment(R.layout.fragment_search_tickets) {
             lifecycleScope.launchWhenStartedUntilStop {
                 viewModel.routeFlow.collect { showRouteEndpoints(it) }
             }
+            lifecycleScope.launchWhenStartedUntilStop {
+                viewModel.bezierCurvePointsFlow.collect { showCurvePoints(it) }
+            }
         }
     }
 
@@ -104,6 +108,19 @@ class SearchTicketsFragment : BaseFragment(R.layout.fragment_search_tickets) {
 
         val boundsUpdate = CameraUpdateFactory.newLatLngBounds(bounds, padding)
         map.moveCamera(boundsUpdate)
+    }
+
+    private fun showCurvePoints(points: List<LatLng>) {
+        val map = map ?: return
+
+        val markerIcon = BitmapDescriptorFactory.fromBitmap(PointMarkerBitmap(requireContext()))
+        for (point in points) {
+            val marker =
+                MarkerOptions()
+                    .position(point)
+                    .icon(markerIcon)
+            map.addMarker(marker)
+        }
     }
 
     override fun onResume() {
