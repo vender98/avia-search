@@ -37,10 +37,9 @@ class SearchTicketsFragment : BaseFragment(R.layout.fragment_search_tickets) {
         with(binding.mapView) {
             onCreate(savedInstanceState?.getBundle(MAPVIEW_BUNDLE_KEY))
             lifecycleScope.launch {
-                map = awaitMap().also {
-                    it.setOnMarkerClickListener { true }
-                }
-                viewModel.onMapReady()
+                val map = awaitMap()
+                this@SearchTicketsFragment.map = map
+                map.setOnMarkerClickListener { true }
             }
         }
     }
@@ -56,12 +55,17 @@ class SearchTicketsFragment : BaseFragment(R.layout.fragment_search_tickets) {
     override fun onStart() {
         super.onStart()
         binding.mapView.onStart()
-        observeViewModel()
+        observeMapData()
     }
 
-    private fun observeViewModel() {
+    private fun observeMapData() {
         lifecycleScope.launchWhenStartedUntilStop {
-            viewModel.routeFlow.collect { showRouteEndpoints(it) }
+            // To start observing map-specific data after the map is ready
+            binding.mapView.awaitMap()
+
+            lifecycleScope.launchWhenStartedUntilStop {
+                viewModel.routeFlow.collect { showRouteEndpoints(it) }
+            }
         }
     }
 
