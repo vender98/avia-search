@@ -7,7 +7,12 @@ import android.graphics.Color
 import android.graphics.PorterDuff
 import android.view.LayoutInflater
 import android.view.View
+import com.google.android.gms.maps.model.LatLng
 import com.vender98.aviasearch.databinding.MarkerCityBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import okhttp3.internal.toImmutableList
+import kotlin.math.pow
 
 //https://stackoverflow.com/a/35800880/11935726
 @Suppress("FunctionName")
@@ -26,4 +31,35 @@ fun CityMarkerBitmap(context: Context, city: String): Bitmap {
     drawable.draw(canvas)
     markerView.draw(canvas)
     return bitmap
+}
+
+suspend fun generateCubicBezierCurve(
+    p1: LatLng,
+    p2: LatLng,
+    p3: LatLng,
+    p4: LatLng,
+    count: Int = 60
+): List<LatLng> = withContext(Dispatchers.Default) {
+    val curvePoints = mutableListOf<LatLng>()
+
+    val step = 1.0 / count
+    var t = 0.0
+    while (t < 1.0) {
+        // P = (1−t)3P1 + 3(1−t)2tP2 +3(1−t)t2P3 + t3P4; for 4 points
+        val arcX =
+            ((1.0 - t).pow(3) * p1.latitude) +
+                    (3 * (1.0 - t).pow(2) * t * p2.latitude) +
+                    (3 * (1.0 - t) * t.pow(2) * p3.latitude) +
+                    (t.pow(3) * p4.latitude)
+        val arcY =
+            ((1.0 - t).pow(3) * p1.longitude) +
+                    (3 * (1.0 - t).pow(2) * t * p2.longitude) +
+                    (3 * (1.0 - t) * t.pow(2) * p3.longitude) +
+                    (t.pow(3) * p4.longitude)
+
+        curvePoints.add(LatLng(arcX, arcY))
+        t += step
+    }
+
+    curvePoints.toImmutableList()
 }
