@@ -111,6 +111,6 @@ class ChooseDestinationFragment : BaseFragment(R.layout.fragment_choose_destinat
     }
 
     companion object {
-        private const val SEARCH_DELAY_IN_MILLIS = 300L
+        private const val SEARCH_DELAY_IN_MILLIS = 150L
     }
 }
