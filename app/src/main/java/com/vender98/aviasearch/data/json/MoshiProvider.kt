@@ -6,5 +6,7 @@ import javax.inject.Provider
 
 class MoshiProvider @Inject constructor() : Provider<Moshi> {
 
-    override fun get(): Moshi = Moshi.Builder().build()
+    override fun get(): Moshi = Moshi.Builder()
+        .add(LatLngAdapter)
+        .build()
 }
