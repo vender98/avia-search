@@ -7,7 +7,9 @@ import android.graphics.Color
 import android.graphics.PorterDuff
 import android.view.LayoutInflater
 import android.view.View
+import androidx.appcompat.content.res.AppCompatResources
 import com.google.android.gms.maps.model.LatLng
+import com.vender98.aviasearch.R
 import com.vender98.aviasearch.databinding.MarkerCityBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -30,6 +32,19 @@ fun CityMarkerBitmap(context: Context, city: String): Bitmap {
     val drawable = markerView.background
     drawable.draw(canvas)
     markerView.draw(canvas)
+    return bitmap
+}
+
+//https://stackoverflow.com/a/35574535/11935726
+@Suppress("FunctionName")
+fun PointMarkerBitmap(context: Context): Bitmap {
+    val pointDrawable = AppCompatResources.getDrawable(context, R.drawable.marker_point)!!
+    val canvas = Canvas()
+    val bitmap =
+        Bitmap.createBitmap(pointDrawable.intrinsicWidth, pointDrawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
+    canvas.setBitmap(bitmap)
+    pointDrawable.setBounds(0, 0, pointDrawable.intrinsicWidth, pointDrawable.intrinsicHeight)
+    pointDrawable.draw(canvas)
     return bitmap
 }
 
