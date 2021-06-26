@@ -32,6 +32,7 @@ object Dependencies {
         const val material = "com.google.android.material:material:1.3.0"
         const val maps = "com.google.android.gms:play-services-maps:17.0.1"
         const val mapsKtx = "com.google.maps.android:maps-ktx:2.3.0"
+        const val mapsUtils = "com.google.maps.android:maps-utils-ktx:2.3.0"
     }
 
     object DI {

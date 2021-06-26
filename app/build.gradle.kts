@@ -55,6 +55,7 @@ dependencies {
     implementation(Dependencies.Google.material)
     implementation(Dependencies.Google.maps)
     implementation(Dependencies.Google.mapsKtx)
+    implementation(Dependencies.Google.mapsUtils)
 
     kapt(Dependencies.DI.toothpickCompiler)
     implementation(Dependencies.DI.toothpickRuntime)
