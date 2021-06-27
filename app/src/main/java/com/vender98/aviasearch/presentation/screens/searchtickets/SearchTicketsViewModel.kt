@@ -19,6 +19,7 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.math.PI
+import kotlin.math.pow
 
 class SearchTicketsViewModel @Inject constructor(
     private val route: Route
@@ -64,13 +65,13 @@ class SearchTicketsViewModel @Inject constructor(
             while (index < curvePoints.lastIndex) {
                 val currentPoint = curvePoints[index]
                 val nextPoint = curvePoints[index + 1]
-                animatePlane(from = currentPoint, to = nextPoint)
+                animatePlane(from = currentPoint, to = nextPoint, durationFactor = index.toDouble() / curvePoints.size)
                 index++
             }
         }
     }
 
-    private suspend fun animatePlane(from: LatLng, to: LatLng) =
+    private suspend fun animatePlane(from: LatLng, to: LatLng, durationFactor: Double) =
         suspendCancellableCoroutine<Unit> { continuation ->
             ValueAnimator.ofFloat(0.0f, 1.0f).apply {
                 addUpdateListener { animation ->
@@ -84,7 +85,7 @@ class SearchTicketsViewModel @Inject constructor(
                 }
                 addListener(onEnd = { continuation.resume(Unit) })
                 interpolator = LinearInterpolator()
-                duration = 300
+                duration = 50 * ((1.0 / (durationFactor - 1.0).pow(4))).toLong()
                 start()
             }
         }
