@@ -9,10 +9,7 @@ import androidx.lifecycle.lifecycleScope
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.LatLngBounds
-import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.*
 import com.google.maps.android.ktx.awaitMap
 import com.vender98.aviasearch.R
 import com.vender98.aviasearch.databinding.FragmentSearchTicketsBinding
@@ -32,6 +29,7 @@ class SearchTicketsFragment : BaseFragment(R.layout.fragment_search_tickets) {
     }
 
     private var map: GoogleMap? = null
+    private var planeMarker: Marker? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -70,13 +68,16 @@ class SearchTicketsFragment : BaseFragment(R.layout.fragment_search_tickets) {
             lifecycleScope.launchWhenStartedUntilStop {
                 viewModel.bezierCurvePointsFlow.collect { showCurvePoints(it) }
             }
+            lifecycleScope.launchWhenStartedUntilStop {
+                viewModel.planePointFlow.collect { showPlane(it) }
+            }
         }
     }
 
     private fun showRouteEndpoints(route: Route) {
         val map = this.map ?: return
 
-        val departureMarker =
+        val departureMarkerOptions =
             MarkerOptions()
                 .position(route.departureCity.location)
                 .icon(
@@ -84,7 +85,8 @@ class SearchTicketsFragment : BaseFragment(R.layout.fragment_search_tickets) {
                         CityMarkerBitmap(requireContext(), route.departureCity.name)
                     )
                 )
-        val destinationMarker =
+                .zIndex(CITY_MARKER_Z_INDEX)
+        val destinationMarkerOptions =
             MarkerOptions()
                 .position(route.destinationCity.location)
                 .icon(
@@ -92,12 +94,13 @@ class SearchTicketsFragment : BaseFragment(R.layout.fragment_search_tickets) {
                         CityMarkerBitmap(requireContext(), route.destinationCity.name)
                     )
                 )
-        map.addMarker(departureMarker)
-        map.addMarker(destinationMarker)
+                .zIndex(CITY_MARKER_Z_INDEX)
+        map.addMarker(departureMarkerOptions)
+        map.addMarker(destinationMarkerOptions)
 
         val bounds = LatLngBounds.Builder()
-            .include(departureMarker.position)
-            .include(destinationMarker.position)
+            .include(route.departureCity.location)
+            .include(route.destinationCity.location)
             .build()
         val padding =
             if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
@@ -115,12 +118,32 @@ class SearchTicketsFragment : BaseFragment(R.layout.fragment_search_tickets) {
 
         val markerIcon = BitmapDescriptorFactory.fromBitmap(PointMarkerBitmap(requireContext()))
         for (point in points) {
-            val marker =
+            val markerOptions =
                 MarkerOptions()
                     .position(point)
                     .icon(markerIcon)
-            map.addMarker(marker)
+                    .anchor(0.5f, 0.5f)
+                    .zIndex(CURVE_MARKER_Z_INDEX)
+            map.addMarker(markerOptions)
         }
+    }
+
+    private fun showPlane(point: PlanePoint) {
+        val planeMarker = planeMarker ?: initPlane(point.location, map ?: return)
+
+        planeMarker.position = point.location
+        planeMarker.rotation = point.angle.toFloat() - 90f
+    }
+
+    private fun initPlane(location: LatLng, map: GoogleMap): Marker {
+        val planeMarkerOptions =
+            MarkerOptions()
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_plane))
+                .position(location)
+                .anchor(0.5f, 0.5f)
+                .zIndex(PLANE_MARKER_Z_INDEX)
+        planeMarker = map.addMarker(planeMarkerOptions)
+        return planeMarker!!
     }
 
     override fun onResume() {
@@ -152,6 +175,10 @@ class SearchTicketsFragment : BaseFragment(R.layout.fragment_search_tickets) {
     companion object {
         private const val ROUTE_ARG = "ROUTE_ARG"
         private const val MAPVIEW_BUNDLE_KEY = "MAPVIEW_BUNDLE_KEY"
+
+        private const val CURVE_MARKER_Z_INDEX = 1.0F
+        private const val CITY_MARKER_Z_INDEX = 2.0F
+        private const val PLANE_MARKER_Z_INDEX = 3.0F
 
         fun newInstance(route: Route) = SearchTicketsFragment().apply {
             arguments = bundleOf(ROUTE_ARG to route)
