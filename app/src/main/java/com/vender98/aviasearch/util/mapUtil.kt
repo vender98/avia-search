@@ -60,7 +60,7 @@ suspend fun generateBezierCurve(
     val differentHorizontalHemisphere = abs(from.longitude - to.longitude) > 180
     val differentVerticalHemisphere = from.latitude * to.latitude < 0
 
-    return if (differentVerticalHemisphere) { // Quadratic curve
+    return if (differentVerticalHemisphere) { // Linear curve
         if (differentHorizontalHemisphere) {
             generateDifferentVerticalAndDifferentHorizontalHemisphereCurve(from, to, pointsCount)
         } else {
@@ -80,7 +80,7 @@ private suspend fun generateDifferentVerticalAndDifferentHorizontalHemisphereCur
     to: LatLng,
     pointsCount: Int
 ): List<LatLng> {
-    return generateQuadraticBezierCurve(
+    return generateLinearBezierCurve(
         p1 = LatLng(from.latitude, from.longitude - 180),
         p2 = LatLng(to.latitude, to.longitude - 180),
         pointsCount
@@ -92,7 +92,7 @@ private suspend fun generateDifferentVerticalAndSameHorizontalHemisphereCurve(
     from: LatLng,
     to: LatLng,
     pointsCount: Int
-): List<LatLng> = generateQuadraticBezierCurve(p1 = from, p2 = to, pointsCount)
+): List<LatLng> = generateLinearBezierCurve(p1 = from, p2 = to, pointsCount)
 
 private suspend fun generateSameVerticalAndDifferentHorizontalHemisphereCurve(
     from: LatLng,
@@ -164,7 +164,7 @@ suspend fun generateCubicBezierCurve(
     curvePoints.toImmutableList()
 }
 
-suspend fun generateQuadraticBezierCurve(
+suspend fun generateLinearBezierCurve(
     p1: LatLng,
     p2: LatLng,
     pointsCount: Int
