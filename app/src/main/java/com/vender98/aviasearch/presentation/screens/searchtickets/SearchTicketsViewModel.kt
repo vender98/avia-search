@@ -13,6 +13,7 @@ import com.vender98.aviasearch.extensions.rotate
 import com.vender98.aviasearch.ui.screens.searchtickets.PlanePoint
 import com.vender98.aviasearch.ui.screens.searchtickets.Route
 import com.vender98.aviasearch.ui.screens.searchtickets.generateCubicBezierCurve
+import com.vender98.aviasearch.ui.screens.searchtickets.generateQuadraticBezierCurve
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -42,18 +43,27 @@ class SearchTicketsViewModel @Inject constructor(
 
     private fun generateBezierCurvePoints() {
         viewModelScope.launch {
-            val routeBounds =
-                LatLngBounds.Builder()
-                    .include(route.departureCity.location)
-                    .include(route.destinationCity.location)
-                    .build()
-
-            val point1 = route.departureCity.location
-            val point4 = route.destinationCity.location
-            val point2 = point1.rotate(relativePoint = routeBounds.center, angle = PI / 2)
-            val point3 = point4.rotate(relativePoint = routeBounds.center, angle = PI / 2)
-
-            val curve = generateCubicBezierCurve(point1, point2, point3, point4)
+            val (departureCity, destinationCity) = route
+            val curve =
+                if (departureCity.location.latitude * destinationCity.location.latitude < 0
+                    || departureCity.location.longitude * destinationCity.location.longitude < 0
+                ) {
+                    generateQuadraticBezierCurve(
+                        p1 = departureCity.location,
+                        p2 = destinationCity.location
+                    )
+                } else {
+                    val point1 = departureCity.location
+                    val point4 = destinationCity.location
+                    val routeBounds =
+                        LatLngBounds.Builder()
+                            .include(departureCity.location)
+                            .include(destinationCity.location)
+                            .build()
+                    val point2 = point1.rotate(relativePoint = routeBounds.center, angle = PI / 2)
+                    val point3 = point4.rotate(relativePoint = routeBounds.center, angle = PI / 2)
+                    generateCubicBezierCurve(point1, point2, point3, point4)
+                }
             _bezierCurvePointsFlow.tryEmit(curve)
         }
     }

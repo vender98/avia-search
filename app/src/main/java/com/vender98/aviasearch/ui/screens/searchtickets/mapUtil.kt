@@ -78,3 +78,28 @@ suspend fun generateCubicBezierCurve(
 
     curvePoints.toImmutableList()
 }
+
+suspend fun generateQuadraticBezierCurve(
+    p1: LatLng,
+    p2: LatLng,
+    count: Int = 60
+): List<LatLng> = withContext(Dispatchers.Default) {
+    val curvePoints = mutableListOf<LatLng>()
+
+    val step = 1.0 / count
+    var t = 0.0
+    while (t < 1.0) {
+        // P = (1-t)P1 +tP2; for 2 points
+        val arcX =
+            ((1.0 - t) * p1.latitude) +
+                    (t * p2.latitude)
+        val arcY =
+            ((1.0 - t) * p1.longitude) +
+                    (t * p2.longitude)
+
+        curvePoints.add(LatLng(arcX, arcY))
+        t += step
+    }
+
+    curvePoints.toImmutableList()
+}
