@@ -16,6 +16,8 @@ import com.vender98.aviasearch.databinding.FragmentSearchTicketsBinding
 import com.vender98.aviasearch.di.ToothpickViewModelFactory
 import com.vender98.aviasearch.presentation.screens.searchtickets.SearchTicketsViewModel
 import com.vender98.aviasearch.ui.base.BaseFragment
+import com.vender98.aviasearch.util.CityMarkerBitmap
+import com.vender98.aviasearch.util.PointMarkerBitmap
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 

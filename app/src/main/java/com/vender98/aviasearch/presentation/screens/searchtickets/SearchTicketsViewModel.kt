@@ -10,7 +10,7 @@ import com.google.maps.android.ktx.utils.sphericalHeading
 import com.google.maps.android.ktx.utils.withSphericalLinearInterpolation
 import com.vender98.aviasearch.ui.screens.searchtickets.PlanePoint
 import com.vender98.aviasearch.ui.screens.searchtickets.Route
-import com.vender98.aviasearch.ui.screens.searchtickets.generateBezierCurve
+import com.vender98.aviasearch.util.generateBezierCurve
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine

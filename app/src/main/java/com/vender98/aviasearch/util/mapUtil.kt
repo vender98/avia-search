@@ -1,4 +1,4 @@
-package com.vender98.aviasearch.ui.screens.searchtickets
+package com.vender98.aviasearch.util
 
 import android.content.Context
 import android.graphics.Bitmap
